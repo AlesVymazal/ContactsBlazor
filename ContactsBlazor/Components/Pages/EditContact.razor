@@ -1,0 +1,30 @@
+﻿@page "/editcontact/{id:int}"
+
+@rendermode InteractiveServer
+@inject ApplicationDbContext context
+@inject NavigationManager navigation
+
+<h3>EditContact</h3>
+
+<EditFormContact contact=contact submit=Save @rendermode=InteractiveServer></EditFormContact>
+
+@code {
+	private Contact? contact { get; set; } = new Contact();
+	[Parameter]
+	public int id { get; set; }
+
+	protected override void OnInitialized()
+	{
+		contact = context.Contacts.Find(id);
+	}
+	void Save()
+	{
+		if(contact != null)
+		{
+			context.SaveChanges();
+			navigation.NavigateTo("/");
+		}
+
+	}
+
+}

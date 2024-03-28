@@ -1,0 +1,53 @@
+﻿<EditForm Model="contact" OnValidSubmit="Save">
+	<DataAnnotationsValidator />
+	<div class="form-group">
+		<label class="control-label col-md-2">First Name</label>
+		<div class="col-md-3">
+			<InputText @bind-Value="contact.FirstName" class="form-control" />
+		</div>
+	</div>
+	<div class="form-group">
+		<label class="control-label col-md-2">Last Name</label>
+		<div class="col-md-3">
+			<InputText @bind-Value="contact.LastName" class="form-control" />
+		</div>
+
+	</div>
+	<div class="form-group">
+		<label class="control-label col-md-2">Email</label>
+		<div class="col-md-3">
+			<InputText @bind-Value="contact.Email" class="form-control" />
+			<ValidationMessage For="() => contact.Email" />
+		</div>
+
+	</div>
+	<div class="form-group">
+		<label class="control-label col-md-2">Phone Number</label>
+		<div class="col-md-3">
+			<InputText @bind-Value="contact.PhoneNumber" class="form-control" />
+			<ValidationMessage For="() => contact.PhoneNumber" />
+		</div>
+
+	</div>
+
+	<div class="form-group" style="margin-top:10px">
+		<div class="col-md-3">
+			<button class="btn btn-primary" type="submit">Save</button>
+		</div>
+	</div>
+	<div>
+		<ValidationSummary />
+	</div>
+</EditForm>
+
+@code {
+	[Parameter]
+	public Contact contact { get; set; } = new Contact();
+	[Parameter]
+	public Action submit { get; set; }
+	void Save()
+	{
+		submit.Invoke();
+	}
+
+}

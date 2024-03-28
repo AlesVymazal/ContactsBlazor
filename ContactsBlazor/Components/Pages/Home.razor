@@ -1,0 +1,123 @@
+﻿@page "/"
+@using ContactsBlazor.Data
+@inject ApplicationDbContext context
+@inject NavigationManager navigation
+@inject AuthenticationStateProvider authentication
+@rendermode InteractiveServer
+
+<PageTitle>Home</PageTitle>
+
+<AuthorizeView>
+	<Authorized>
+		<div class="flex-column">
+			<div style="margin-bottom:1rem">
+				<label for="form-control">Filter table</label>
+				<input class="input-group-sm" @bind=@Filter @bind:event="oninput" />
+			</div>
+			<div style="margin-bottom:1rem">
+				<label for="form-control">Filter property</label>
+				<select class="form-select-sm" @onchange=@((selectEvent) => SelectedValue(selectEvent))>
+					<option value="FirstName">First Name</option>
+					<option value="LastName">Last Name</option>
+					<option value="Email">Email</option>
+					<option value="PhoneNumber">Phone Number</option>
+				</select>
+			</div>
+		</div>
+
+		<table class="table">
+			<thead>
+				<tr>
+					<th>
+						First Name
+					</th>
+					<th>
+						Last Name
+					</th>
+					<th>
+						Email
+					</th>
+					<th>
+						Phone Number
+					</th>
+					<th>
+
+					</th>
+
+				</tr>
+			</thead>
+			<tbody>
+				@foreach (var contact in contacts)
+				{
+					<tr>
+						<td>
+							@contact.FirstName
+						</td>
+						<td>
+							@contact.LastName
+						</td>
+						<td>
+							@contact.Email
+						</td>
+						<td>
+							@contact.PhoneNumber
+						</td>
+						<td>
+							<a class="btn btn-primary btn-sm" href="/editcontact/@contact.Id">edit</a>
+							<button class="btn btn-danger btn-sm" @onclick=@(() => Delete(@contact.Id))>delete</button>
+						</td>
+
+					</tr>
+				}
+			</tbody>
+		</table>
+	</Authorized>
+	<NotAuthorized>
+		<h5>
+			<span>You're currently not authorized, register new account and then log in to see the content of the page.</span>
+		</h5>
+	</NotAuthorized>
+</AuthorizeView>
+
+
+
+@code{
+	private List<Contact> contacts = new List<Contact>();
+	private string filterProperty = "FirstName";
+	private string filterValue = string.Empty;
+	private string Filter { 
+		get => filterValue;
+		set => FilterFunction(value);
+	}
+
+	private void SelectedValue(ChangeEventArgs selectEvent)
+	{
+		filterProperty = selectEvent.Value!.ToString()!;
+		contacts = context.Contacts.ToList();
+		filterValue = string.Empty;
+	}
+	protected override async Task OnInitializedAsync()
+	{
+		var authState = await authentication.GetAuthenticationStateAsync();
+		if(authState.User.Identity!.IsAuthenticated)
+			contacts = context.Contacts.ToList();
+	}
+	private void Delete(int id)
+	{
+		var contact = context.Contacts.Find(id);
+		if(contact != null)
+		{
+			context.Contacts.Remove(contact);
+			context.SaveChanges();
+			contacts = context.Contacts.ToList();
+			filterValue = string.Empty;
+			this.StateHasChanged();
+		}
+	}
+	private void FilterFunction(string value)
+	{
+		filterValue = value;
+		contacts = context.Contacts.Where(x => EF.Property<string>(x, filterProperty).Contains(filterValue)).ToList();
+		this.StateHasChanged();
+	}
+}

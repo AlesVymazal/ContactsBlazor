@@ -1,0 +1,52 @@
+﻿@page "/createcontact"
+@rendermode InteractiveServer
+@inject ApplicationDbContext context
+@inject NavigationManager navigation
+
+
+<AuthorizeView>
+	<Authorized>
+		<EditFormContact contact=contact submit=Save @rendermode=InteractiveServer></EditFormContact>
+		<hr />
+		<div class="flex-column">
+			<h6>Create 15 new contacts</h6>
+			<button class="btn btn-primary" style="margin-bottom:1rem" @onclick=@CreateContacts>Create contacts</button>
+		</div>
+	</Authorized>
+	<NotAuthorized>
+		<h5>
+			<span>You're currently not authorized, register new account and then log in to see the content of the page.</span>
+		</h5>
+	</NotAuthorized>
+</AuthorizeView>
+
+@code {
+	private Contact contact { get; set; } = new Contact();
+	void Save()
+	{
+		context.Contacts.Add(contact);
+		context.SaveChanges();
+		navigation.NavigateTo("/");
+	}
+	void CreateContacts()
+	{
+		//context.Database.ExecuteSql($"dbcc CHECKIDENT('dbo.Contacts', RESEED, 0)");
+		context.Contacts.Add(new Contact { FirstName = "Ales", LastName = "Vymazal", PhoneNumber = "123456789", Email = "abc@mail.com" });
+		context.Contacts.Add(new Contact { FirstName = "Jan", LastName = "Novak", PhoneNumber = "456456456", Email = "novak@seznam.cz" });
+		context.Contacts.Add(new Contact { FirstName = "Pavel", LastName = "Dvorak", PhoneNumber = "789789789", Email = "dvorak@gmail.com" });
+		context.Contacts.Add(new Contact { FirstName = "Lubos", LastName = "Svec", PhoneNumber = "123456789", Email = "Lubos@mail.com" });
+		context.Contacts.Add(new Contact { FirstName = "Jaroslav", LastName = "Korytko", PhoneNumber = "456456456", Email = "Jaroslav@seznam.cz" });
+		context.Contacts.Add(new Contact { FirstName = "Rostislav", LastName = "Manhal", PhoneNumber = "789789789", Email = "Rostislav@gmail.com" });
+		context.Contacts.Add(new Contact { FirstName = "Marek", LastName = "Vymazal", PhoneNumber = "123456789", Email = "Marek@mail.com" });
+		context.Contacts.Add(new Contact { FirstName = "Filip", LastName = "Severin", PhoneNumber = "456456456", Email = "Severin@seznam.cz" });
+		context.Contacts.Add(new Contact { FirstName = "Pavel", LastName = "Dvorak", PhoneNumber = "789789789", Email = "dvorak@gmail.com" });
+		context.Contacts.Add(new Contact { FirstName = "Jana", LastName = "Tomeskova", PhoneNumber = "456456456", Email = "Tomeskova@seznam.cz" });
+		context.Contacts.Add(new Contact { FirstName = "Sabina", LastName = "Sustova", PhoneNumber = "789789789", Email = "Sustova@gmail.com" });
+		context.Contacts.Add(new Contact { FirstName = "Miloslava", LastName = "Turovska", PhoneNumber = "123456789", Email = "Miloslava@mail.com" });
+		context.Contacts.Add(new Contact { FirstName = "Alzbeta", LastName = "Hrstkova", PhoneNumber = "456456456", Email = "Alzbeta@seznam.cz" });
+		context.Contacts.Add(new Contact { FirstName = "Anna", LastName = "Duong", PhoneNumber = "789789789", Email = "Anna@gmail.com" });
+		context.Contacts.Add(new Contact { FirstName = "Tereza", LastName = "Bostikova", PhoneNumber = "123456789", Email = "Tereza@mail.com" });
+		navigation.NavigateTo("/");
+		context.SaveChanges();
+	}
+}
