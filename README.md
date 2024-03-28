@@ -7,13 +7,13 @@
    * Go to the right side menu and click Create new contact and test the appliacation
 ## 2. List of functions
    ### Home.razor
-     * *FilterFunction* - filters the content of the table by selected filter property
-     * *Delete* - deletes one item in table
+     FilterFunction - filters the content of the table by selected filter property
+     Delete - deletes one item in table
    ### EditContact.razoe
-     * *Save* - saves the changed contact into the database
+     Save - saves the changed contact into the database
    ### CreateContact.razor
-     * *Save* - saves the newly created contact into the database
-     * *CreateContacts* - creates several predefined contacts
+     Save - saves the newly created contact into the database
+     CreateContacts - creates several predefined contacts
    
    
   
